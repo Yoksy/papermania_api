@@ -1,7 +1,7 @@
-const model = require("../model/User");
+const userModel = require("../model/User");
 
 exports.getAllUsers = (req, res) => {
-  model.find({}, (err, resp) => {
+  userModel.find({}, (err, resp) => {
     console.log('GET::getAllUsers', err && err.message || '')
     if (err) res.status(500).send(err);
 
@@ -10,7 +10,7 @@ exports.getAllUsers = (req, res) => {
 };
 
 exports.getUserByUsername = (req, res) => {
-  model.find({ username: req.params.username }, '-_id -__v', (err, resp) => {
+  userModel.find({ username: req.params.username }, '-__v', (err, resp) => {
     console.log('GET::getUser', err && err.message || '')
     if (err) res.status(500).send(err);
 
@@ -19,7 +19,7 @@ exports.getUserByUsername = (req, res) => {
 };
 
 exports.createUser = (req, res) => {
-  const newUser = new model(req.body);
+  const newUser = new userModel(req.body);
 
   newUser.save((err, resp) => {
     console.log('POST::createItem', err && err.message || '')
@@ -30,7 +30,7 @@ exports.createUser = (req, res) => {
 };
 
 exports.updateUserByUsername = (req, res) => {
-  model.findOneAndUpdate(
+  userModel.findOneAndUpdate(
     { username: req.params.username },
     req.body,
     { new: true },
@@ -44,7 +44,7 @@ exports.updateUserByUsername = (req, res) => {
 };
 
 exports.deleteUserByUsername = (req, res) => {
-  model.remove({ username: req.params.username }, (err) => {
+  userModel.remove({ username: req.params.username }, (err) => {
     console.log('DELETE::deleteUser', err && err.message || '')
     if (err) res.status(404).send(err);
 

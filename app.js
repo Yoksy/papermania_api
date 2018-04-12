@@ -9,21 +9,35 @@ autoIncrement.initialize(mongoose.connection);
 require('dotenv').config();
 require('./config/db');
 
+const allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+}
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(allowCrossDomain);
+
+
 
 const itemCtrl = require("./controller/Item");
 const userCtrl = require("./controller/User");
-const categoryCtrl = require("./controller/Category");
+const tagCtrl = require("./controller/Tag");
+const commentCtrl = require("./controller/Comment");
 
 app.route("/items")
   .get(itemCtrl.getAllItems)
   .post(itemCtrl.createItem);
 
-app.route("/items/:itemid")
+app.route("/items/:itemId")
   .get(itemCtrl.getItemById)
   .put(itemCtrl.updateItemById)
   .delete(itemCtrl.deleteItemById);
+
+app.route("/items/:itemId/comments")
+  .post(commentCtrl.createComment);
 
 app.route("/users")
   .get(userCtrl.getAllUsers)
@@ -34,8 +48,12 @@ app.route("/users/:username")
   .put(userCtrl.updateUserByUsername)
   .delete(userCtrl.deleteUserByUsername);
 
-app.route("/categories").get(categoryCtrl.getAllCategories);
-app.route("/categories/:categoryid").get(categoryCtrl.getCategoryBySlug);
+app.route("/tags")
+  .get(tagCtrl.getAllTags)
+  .post(tagCtrl.createTag);
+
+app.route("/tags/:slug")
+  .get(tagCtrl.getTagBySlug);
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);

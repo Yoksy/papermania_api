@@ -1,16 +1,44 @@
 const mongoose = require('mongoose');
 const autoIncrement = require('mongoose-auto-increment');
 const bcrypt = require('bcryptjs');
+const Schema = mongoose.Schema
 
-const UserSchema = new mongoose.Schema({
-  userId: Number,
-  username: { type: String, required: true, index: { unique: true } },
-  email : { type: String, require: true, index: { unique: true } },
-  display_name: String,
-  password: { type: String, required: true },
+const UserSchema = new Schema({
+  user_id: Number,
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,/*
+    validate:[validator({
+        length:{
+            min: 3,
+            max: 24
+        }
+    }), "username"], */
+  },
+  email : {
+    type: String,
+    require: true,
+    unique: true,
+    trim: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  display_name: {
+    type: String,
+    trim: true,
+  },
   avatar: String,
-  item_ids: Array,
-  tutorial_ids: Array,
+  account_type: {
+    type: String,
+    enum: ['admin', 'moderator', 'member'],
+    default: 'member',
+  },
+  location: String,
+  items: [{ type: Schema.Types.ObjectId, ref: 'Item' }],
 },
 {
   timestamps: true
@@ -44,6 +72,6 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   });
 };
 
-UserSchema.plugin(autoIncrement.plugin, { model: 'User', field: 'userId' });
+UserSchema.plugin(autoIncrement.plugin, { model: 'User', field: 'user_id' });
 
 module.exports = mongoose.model('User', UserSchema);
