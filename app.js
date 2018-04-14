@@ -34,12 +34,12 @@ app.route("/items")
 app.route("/items/:category")
   .get(itemCtrl.getItemsByCategory);
 
-app.route("/item/:itemId")
+app.route("/item/:id")
   .get(itemCtrl.getItemById)
   .put(itemCtrl.updateItemById)
   .delete(itemCtrl.deleteItemById);
 
-app.route("/item/:itemId/comments")
+app.route("/item/:id/comments")
   .post(commentCtrl.createComment);
 
 app.route("/users")

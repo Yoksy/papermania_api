@@ -23,11 +23,11 @@ exports.getItemsByCategory = (req, res) => {
     });
 };
 
-exports.getItemById = (req, res) => {
-  itemModel.find({ item_id: req.params.itemId }, '-__id -__v')
+exports.getItemById= (req, res) => {
+  itemModel.find({ item_id: req.params.id }, '-__id -__v')
     .populate('author', 'user_id username display_name avatar')
     .exec(function (err, resp) {
-      console.log(`GET::getItemById:${req.params.itemId}`, err && err.message || '')
+      console.log(`GET::getItemById:${req.params.id}`, err && err.message || '')
       if (err) res.status(500).send(err);
 
       res.status(200).json(resp);
