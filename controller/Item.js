@@ -2,8 +2,8 @@ const itemModel = require("../model/Item");
 const userModel = require("../model/User");
 
 exports.getAllItems = (req, res) => {
-  itemModel.find({})
-    .populate('author')
+  itemModel.find({}, '-__id -updatedAt -medias.gallery -medias.download -__v')
+    .populate('author', 'user_id username display_name avatar')
     .exec(function (err, resp) {
       console.log('GET::getAllItems', err && err.message || '')
       if (err) res.status(500).send(err);
@@ -12,13 +12,26 @@ exports.getAllItems = (req, res) => {
     });
 };
 
-exports.getItemById = (req, res) => {
-  itemModel.findById(req.params.itemId, (err, resp) => {
-    console.log('GET::getItem', err && err.message || '')
-    if (err) res.status(500).send(err);
+exports.getItemsByCategory = (req, res) => {
+  itemModel.find({ category: req.params.category }, '-__id -updatedAt -medias.gallery -medias.download -__v')
+    .populate('author', 'user_id username display_name avatar')
+    .exec(function (err, resp) {
+      console.log(`GET::getItemsByCategory:${req.params.category}`, err && err.message || '')
+      if (err) res.status(500).send(err);
 
-    res.status(200).json(resp);
-  });
+      res.status(200).json(resp);
+    });
+};
+
+exports.getItemById = (req, res) => {
+  itemModel.find({ item_id: req.params.itemId }, '-__id -__v')
+    .populate('author', 'user_id username display_name avatar')
+    .exec(function (err, resp) {
+      console.log(`GET::getItemById:${req.params.itemId}`, err && err.message || '')
+      if (err) res.status(500).send(err);
+
+      res.status(200).json(resp);
+    });
 };
 
 exports.createItem = (req, res) => {

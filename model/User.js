@@ -22,10 +22,12 @@ const UserSchema = new Schema({
     require: true,
     unique: true,
     trim: true,
+    select: false,
   },
   password: {
     type: String,
     required: true,
+    select: false,
   },
   display_name: {
     type: String,

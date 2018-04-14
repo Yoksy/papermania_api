@@ -31,12 +31,15 @@ app.route("/items")
   .get(itemCtrl.getAllItems)
   .post(itemCtrl.createItem);
 
-app.route("/items/:itemId")
+app.route("/items/:category")
+  .get(itemCtrl.getItemsByCategory);
+
+app.route("/item/:itemId")
   .get(itemCtrl.getItemById)
   .put(itemCtrl.updateItemById)
   .delete(itemCtrl.deleteItemById);
 
-app.route("/items/:itemId/comments")
+app.route("/item/:itemId/comments")
   .post(commentCtrl.createComment);
 
 app.route("/users")
