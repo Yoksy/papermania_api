@@ -9,8 +9,16 @@ exports.getAllUsers = (req, res) => {
   });
 };
 
-exports.getUserByUsername = (req, res) => {
-  userModel.find({ username: req.params.username }, '-__v', (err, resp) => {
+exports.getUserByUsernameOrEmail = (req, res) => {
+  const isEmail = /\S+@\S+/.test(req.params.userdata);
+  const request = {};
+
+  if (isEmail)
+    request.email = encodeURI(req.params.userdata)
+  else
+    request.username = req.params.userdata
+
+  userModel.find(request, '-__v', (err, resp) => {
     console.log('GET::getUser', err && err.message || '')
     if (err) res.status(500).send(err);
 

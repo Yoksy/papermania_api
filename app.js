@@ -46,8 +46,8 @@ app.route("/users")
   .get(userCtrl.getAllUsers)
   .post(userCtrl.createUser);
 
-app.route("/users/:username")
-  .get(userCtrl.getUserByUsername)
+app.route("/users/:userdata")
+  .get(userCtrl.getUserByUsernameOrEmail)
   .put(userCtrl.updateUserByUsername)
   .delete(userCtrl.deleteUserByUsername);
 
